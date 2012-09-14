@@ -1,0 +1,6 @@
+.buttons{ background:url("buttons.png") top left no-repeat; }
+.new_game_yellow{ width:300px; height:100px; background-position:-10px -10px; }
+.new_game_gray{ width:300px; height:100px; background-position:-10px -120px; }
+.light_on{ width:100px; height:100px; background-position:-10px -230px; }
+.light_off{ width:100px; height:100px; background-position:-120px -230px; }
+
