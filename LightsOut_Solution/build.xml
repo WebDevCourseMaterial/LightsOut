@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Lights Out" default="build">
+
+  <!-- Defining folder locations and other properties. -->
+  <property name="closure.dir" value="${basedir}/../../../closure" />
+  <!-- Required folder structure within the closure folder:
+      closure/closure-compiler  (svn checkout of http://closure-compiler.googlecode.com/svn/trunk/)
+      closure/closure-library   (svn checkout of http://closure-library.googlecode.com/svn/trunk/)
+   -->
+
+  <!-- Path to this build file from base.js (used by depswriter.py) -->
+  <property name="fromBase.dir"
+      value="../../../../gitrepos/LightsOut/LightsOut_Solution" />
+	
+  <!-- Set to false for optimized production compiling.
+	   Set to true for un-optimized whitespace only compiling for debugging work. -->
+  <property name="debug" value="false" />
+	
+  <!-- Targets -->
+  <target name="clean"
+  	  description="Deletes the contents of the build directory">
+    <delete dir="${build.dir}" />
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/production/js"/>
+    <mkdir dir="${build.dir}/production/stylesheets"/>
+  </target>
+
+  <target name="gen_js_deps"
+  	  description="Generate the deps.js file for testing and uncompiled development">
+    <depswriter
+        pathFromCurrentDir = 'js'
+        pathFromLibraryBase = '${fromBase.dir}/js'
+        outputfile='${build.dir}/deps.js'>
+    </depswriter>
+  </target>
+
+  <target name="replicate"
+  	  description="Copy non-js files into the build folder as necessary">
+    <copy todir="${build.dir}/production">
+      <fileset dir=".">
+        <include name="lightsout.html" />
+        <include name="images/**" />
+        <include name="stylesheets/**" />
+        </fileset>
+    </copy>
+  </target>
+
+  <target name="compile" description="generates the compiled javascript">
+    <closure-builder
+        root='${basedir}/js/'
+        outputfile="${build.dir}/production/js/lightsout.js"
+        compilationlevel="${closure.optimizations}" > <!-- Selects value based on debug property -->
+      <namespaces>
+        <arg line='--namespace=lightsout.Main' />
+      </namespaces>
+      <extraflags>
+      	<!-- Optional.  This turns what would be warnings into errors for type safety. -->
+        <arg line='--compiler_flags="--jscomp_error=checkTypes"' />
+      </extraflags>
+    </closure-builder>
+  </target>
+	
+  <target name="build" depends="clean, gen_js_deps, replicate, compile" />
+
+
+
+<!--  Ideally you should not need to edit anything beyong this point.  -->
+	
+  <!-- Locations for the closure components based on the closure folder. -->
+  <property name="compiler.jar" value="${closure.dir}/closure-compiler/build/compiler.jar" />
+  <property name="closure-library.dir" value="${closure.dir}/closure-library" />
+
+  <!-- Output Build Directory -->
+  <property name="build.dir" value="${basedir}/build" />
+
+  <!-- Conditional properties that are set based on the value of the debug property. -->
+  <condition property="closure.optimizations" value="WHITESPACE_ONLY" else="ADVANCED_OPTIMIZATIONS">
+  	<equals arg1="${debug}" arg2="true" casesensitive="false"/>
+  </condition>
+  <condition property="pretty_print_formatting_arg" value='--compiler_flags="--formatting=PRETTY_PRINT"' else="">
+    <equals arg1="${debug}" arg2="true" casesensitive="false"/>
+  </condition>
+  <condition property="print_input_delimiter_formatting_arg" value='--compiler_flags="--formatting=PRINT_INPUT_DELIMITER"' else="">
+    <equals arg1="${debug}" arg2="true" casesensitive="false"/>
+  </condition>
+
+  		
+  <!-- Used to generate a deps file for testing and uncompiled development -->
+  <macrodef name="depswriter">
+    <attribute name="pathFromCurrentDir" />
+    <attribute name="pathFromLibraryBase" />
+    <attribute name="outputfile" />
+    <element name="extraflags" optional="yes"/>
+    <sequential>
+      <exec executable="c:\Python27\python" failonerror="true" logError="true">
+        <arg value="${closure-library.dir}/closure/bin/build/depswriter.py" />
+        <arg line='--root_with_prefix="@{pathFromCurrentDir} @{pathFromLibraryBase}"' />
+        <arg line='--output_file="@{outputfile}"' />
+        <extraflags />
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <!-- Options for the compilationlevels:
+    WHITESPACE_ONLY, SIMPLE_OPTIMIZATIONS, ADVANCED_OPTIMIZATIONS" -->
+
+  <!-- extraflags you might want to add (replace XX with two hypens) -->
+    <!-- <arg line='XXcompiler_flags="XXjscomp_error=checkTypes"' /> -->
+    <!-- <arg line='XXroot=folder/with/other/js/files' /> -->
+    <!-- <arg line='XXnamespace=yournamespace.yourmodule' /> -->
+    <!-- <arg line='XXcompiler_flags="XXformatting=PRETTY_PRINT"' /> -->
+    <!-- <arg line='XXcompiler_flags="XXformatting=PRINT_INPUT_DELIMITER"' /> -->
+    <!-- <arg line='XXcompiler_flags="XXdebug=true"' /> -->
+    <!-- <arg line='XXcompiler_flags="XXgenerate_exports=true"' /> -->
+    <!-- <arg line='XXcompiler_flags="XXexterns=someFileWithExterns.js"' /> -->
+
+  <!-- Used to compile the JavaScript into a single "compiled" file. -->
+  <macrodef name="closure-builder">
+    <attribute name="root" />
+	<element name="namespaces" optional="no"/>
+    <attribute name="outputfile" />
+    <attribute name="compilationlevel" default="ADVANCED_OPTIMIZATIONS" />
+    <element name="extraflags" optional="yes"/>
+    <sequential>
+      <exec executable="c:\Python27\python" failonerror="true" logError="true">
+        <arg value="${closure-library.dir}/closure/bin/build/closurebuilder.py" />
+        <arg line='--root="${closure-library.dir}"' />
+        <arg line='--root="@{root}"' />
+        <namespaces />
+        <arg line='--output_mode=compiled' />
+        <arg line='--compiler_jar=${compiler.jar}' />
+        <arg line='--output_file=@{outputfile}' />
+        <arg line='--compiler_flags="--compilation_level=@{compilationlevel}"' />
+        <arg line='--compiler_flags="--js=${closure-library.dir}/closure/goog/deps.js"' />
+        <arg line='--compiler_flags="--warning_level=VERBOSE"' />
+        <arg line="${pretty_print_formatting_arg}" />
+        <arg line="${print_input_delimiter_formatting_arg}" />
+        <extraflags />
+      </exec>
+    </sequential>
+  </macrodef>
+
+</project>
