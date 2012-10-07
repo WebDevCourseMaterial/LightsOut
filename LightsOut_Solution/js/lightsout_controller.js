@@ -177,6 +177,8 @@ lightsout.LightsOutController.prototype.disposeInternal = function() {
     goog.dispose(this.lightControls_[i]);
   }
   delete this.lightControls_;
+  goog.dispose(this.newGameControl_);
+  delete this.newGameControl_;
 
   // Remove the DOM elements.
   goog.dom.removeChildren(this.container_);
