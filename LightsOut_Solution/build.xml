@@ -7,6 +7,10 @@
       closure/closure-compiler  (svn checkout of http://closure-compiler.googlecode.com/svn/trunk/)
       closure/closure-library   (svn checkout of http://closure-library.googlecode.com/svn/trunk/)
    -->
+   
+  <!-- Path to your python executable -->
+  <property name="python" value="c:\Python27\python" />
+  <!-- Tip for Mac users.  It's on the path, so use value="python" no folders needed. -->
 
   <!-- Path to this build file from base.js (used by depswriter.py) -->
   <property name="fromBase.dir"
@@ -92,7 +96,7 @@
     <attribute name="outputfile" />
     <element name="extraflags" optional="yes"/>
     <sequential>
-      <exec executable="c:\Python27\python" failonerror="true" logError="true">
+      <exec executable="${python}" failonerror="true" logError="true">
         <arg value="${closure-library.dir}/closure/bin/build/depswriter.py" />
         <arg line='--root_with_prefix="@{pathFromCurrentDir} @{pathFromLibraryBase}"' />
         <arg line='--output_file="@{outputfile}"' />
@@ -122,7 +126,7 @@
     <attribute name="compilationlevel" default="ADVANCED_OPTIMIZATIONS" />
     <element name="extraflags" optional="yes"/>
     <sequential>
-      <exec executable="c:\Python27\python" failonerror="true" logError="true">
+      <exec executable="${python}" failonerror="true" logError="true">
         <arg value="${closure-library.dir}/closure/bin/build/closurebuilder.py" />
         <arg line='--root="${closure-library.dir}"' />
         <arg line='--root="@{root}"' />
