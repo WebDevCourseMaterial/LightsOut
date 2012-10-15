@@ -2,4 +2,4 @@
 // Please do not edit.
 goog.addDependency('../../../../gitrepos/LightsOut/LightsOut_Solution/js/lightsout_controller.js', ['lightsout.LightsOutController'], ['goog.debug.Logger', 'goog.dom', 'goog.dom.classes', 'goog.events', 'goog.events.EventTarget', 'goog.ui.Control', 'lightsout.LinearGame']);
 goog.addDependency('../../../../gitrepos/LightsOut/LightsOut_Solution/js/lightsout_game.js', ['lightsout.LinearGame'], ['goog.array', 'goog.math']);
-goog.addDependency('../../../../gitrepos/LightsOut/LightsOut_Solution/js/main.js', ['lightsout.Main'], ['goog.debug.Console', 'goog.debug.LogManager', 'goog.debug.Logger', 'goog.dom', 'goog.events', 'lightsout.LightsOutController']);
+goog.addDependency('../../../../gitrepos/LightsOut/LightsOut_Solution/js/main.js', ['lightsout.main'], ['goog.debug.Console', 'goog.debug.LogManager', 'goog.debug.Logger', 'goog.dom', 'goog.events', 'lightsout.LightsOutController']);
