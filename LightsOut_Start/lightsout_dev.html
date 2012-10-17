@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Lights Out</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/lightsout.css" />
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <script type="text/javascript" src="../../../closure/closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript">
+      goog.require('goog.events');
+      goog.require('goog.events.EventTarget');
+      goog.require('goog.debug.Logger');
+    </script>
+    <!-- Initially select the files to include using a direct method. -->
+    <script type="text/javascript" src="js/lightsout_game.js"></script>
+    <script type="text/javascript" src="js/lightsout_controller.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+      
+    <!-- Later (after setting up the deps.js file, use goog.require statements. -->
+    <!--
+    <script type="text/javascript" src="build/deps.js"></script>
+    <script type="text/javascript">
+      goog.require('lightsout.main');
+    </script>
+     -->
+  </head>
+  <body>
+    <div class="title">Turn all the lights out</div>
+    <div class="container">
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="new-game-button">New Game</div>
+    </div>
+  </body>
+</html>
