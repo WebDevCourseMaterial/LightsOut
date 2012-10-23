@@ -35,7 +35,7 @@ lightsout.LightsOutController = function(contentElement) {
   this.container_ = contentElement;
 
   /**
-   * Array of button controls.  Reference held for later disposal.
+   * Array of light controls.
    * @type {Array.<goog.ui.Control>}
    * @private
    */
